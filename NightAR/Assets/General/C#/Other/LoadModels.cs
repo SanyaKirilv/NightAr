@@ -19,12 +19,16 @@ public class LoadModels : MonoBehaviour
     void Awake()
     {
         PersentageText.text = " ";
-        if(!PlayerPrefs.HasKey(assetBundleIndex)) PlayerPrefs.SetInt(assetBundleIndex, 0);
+        if(!PlayerPrefs.HasKey(assetBundleIndex))
+        {
+            PlayerPrefs.DeleteAll();
+            PlayerPrefs.SetInt(assetBundleIndex, 0);
+        }
         reDownload = PlayerPrefs.GetInt(assetBundleIndex);
         if(reDownload == 0) Caching.ClearCache();
         for(int i = 0; i <= 5; i++) assetBundleLink[i] = "https://drive.google.com/uc?export=download&id=" + assetBundleLink[i];
         Caching.compressionEnabled = false;
-        PartText.text = string.Format("Скачано {0}/6 частей", index);//
+        PartText.text = string.Format("Скачано {0}/6 частей", index);
         StartCoroutine(Download());  
     }
     private IEnumerator Download()

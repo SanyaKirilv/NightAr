@@ -3,8 +3,18 @@ using UnityEngine.UI;
 using UnityEngine.Video;
 using UnityEngine.Audio;
 
+[System.Serializable]
+public class ImageTarget
+{
+    public VideoClip videoClip;
+    public AudioClip audioClip;
+    public GameObject videoBox;
+    public Sprite audioSourcePicture;
+    public GameObject text;
+}
 public class ImageController : MonoBehaviour
 {
+    public ImageTarget[] imageTarget;
     [Header("Scripts Settings")]
     public OrientationSetter _orientationSetter;
     public GameObject _sliderControllerAudio;
@@ -17,20 +27,12 @@ public class ImageController : MonoBehaviour
     public Button[] controlButton;
     public Animation[] messageBox;
     [Space(25)]
-    [Header("Video Settings")]
+    [Header("Video/Audio Settings")]
     public VideoPlayer videoPlayer;
-    public Animation[] videoSlider;
-    public VideoClip[] videoClip;
-    public GameObject[] videoBox;
-    [Space(25)]
-    [Header("Audio Settings")]
     public AudioSource audioPlayer;
     public Image audioPicture;
-    public Sprite[] audioSourcePicture;
-    public AudioClip[] audioClip;
-    [Space(25)]
-    [Header("Text Settings")]
-    public GameObject[] text;
+    public Animation[] videoSlider;    
+
     [HideInInspector] private int currentTarget = -1;
     [HideInInspector] public bool isFullscreenVideo, isVideoSlider, isFullscreenAudio, isFullscreenText, isFounded;
     
@@ -41,7 +43,7 @@ public class ImageController : MonoBehaviour
         _sliderControllerAudio.GetComponent<SliderController>().Pause();
         currentTarget = -1;
         foreach (var item in messageBox) item.Play("See_Message");
-        foreach (var item in videoBox) item.SetActive(false);
+        for(var i = 0; i < 24; i++) imageTarget[i].videoBox.SetActive(false);
     }
     public void OnFound(string targetName)
     {
@@ -59,6 +61,66 @@ public class ImageController : MonoBehaviour
             case "ImageTarget_4":
                 currentTarget = 3;
                 break;
+            case "ImageTarget_5":
+                currentTarget = 4;
+                break;
+            case "ImageTarget_6":
+                currentTarget = 5;
+                break;
+            case "ImageTarget_7":
+                currentTarget = 6;
+                break;
+            case "ImageTarget_8":
+                currentTarget = 7;
+                break;
+            case "ImageTarget_9":
+                currentTarget = 8;
+                break;
+            case "ImageTarget_10":
+                currentTarget = 9;
+                break;
+            case "ImageTarget_11":
+                currentTarget = 10;
+                break;
+            case "ImageTarget_12":
+                currentTarget = 11;
+                break;
+            case "ImageTarget_13":
+                currentTarget = 12;
+                break;
+            case "ImageTarget_14":
+                currentTarget = 13;
+                break;
+            case "ImageTarget_15":
+                currentTarget = 14;
+                break;
+            case "ImageTarget_16":
+                currentTarget = 15;
+                break;
+            case "ImageTarget_17":
+                currentTarget = 16;
+                break;
+            case "ImageTarget_18":
+                currentTarget = 17;
+                break;
+            case "ImageTarget_19":
+                currentTarget = 18;
+                break;
+            case "ImageTarget_20":
+                currentTarget = 19;
+                break;
+            case "ImageTarget_21":
+                currentTarget = 20;
+                break;
+            case "ImageTarget_22":
+                currentTarget = 21;
+                break;
+            case "ImageTarget_23":
+                currentTarget = 22;
+                break;
+            case "ImageTarget_24":
+                currentTarget = 23;
+                break;
         }
         foreach (var item in messageBox) item.Play("Hide_Message");
         isFounded = true;
@@ -69,7 +131,7 @@ public class ImageController : MonoBehaviour
         currentTarget = -1;
         isFounded = false;
         foreach (var item in messageBox) item.Play("See_Message");
-        foreach (var item in videoBox) item.SetActive(false);
+        for(var i = 0; i < 24; i++) imageTarget[i].videoBox.SetActive(false);
         if(isVideoSlider)
         {
             foreach (var item in videoSlider) item.Play("Hide_SliderPortrait");
@@ -103,20 +165,23 @@ public class ImageController : MonoBehaviour
     public void Video()
     {
         isVideoSlider = true;
-        videoPlayer.clip = videoClip[currentTarget];
-        videoBox[currentTarget].SetActive(true);
+        videoPlayer.clip = imageTarget[currentTarget].videoClip;
+        imageTarget[currentTarget].videoBox.SetActive(true);
         foreach (var item in videoSlider) item.Play("See_SliderPortrait");
     }
 
     public void Audio()
     {
-        audioPlayer.clip = audioClip[currentTarget];
-        audioPicture.sprite = audioSourcePicture[currentTarget];
+        audioPlayer.clip = imageTarget[currentTarget].audioClip;
+        audioPicture.sprite = imageTarget[currentTarget].audioSourcePicture;
+        PauseVideo();
         FullscreenAudio();
     }
     public void Text()
     {
-        text[currentTarget].SetActive(true);
+        imageTarget[currentTarget].text.SetActive(true);
+        _orientationSetter.ScreenOrientation = 1;
+        PauseVideo();
         FullscreenText();
     }
 
